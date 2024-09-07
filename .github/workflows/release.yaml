@@ -26,13 +26,13 @@ jobs:
       - uses: actions/checkout@master
         with:
           fetch-depth: 1
-      - name: Setup VM, download dependencies to build and test in FreeBSD
+      - name: Setup VM, download dependencies to build and test in OpenBSD
         id: test
         uses: vmactions/openbsd-vm@v1
         with:
           usesh: true
           prepare: |
-            pkg_add bash gmake go gcc pkgconf libX11 libXtst gtk3
+            pkg_add bash gmake go pkgconf gtk+3
           run: |
             gmake t && gmake build
 
