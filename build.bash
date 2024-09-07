@@ -28,8 +28,8 @@ build_freebsd() {
 
 build_openbsd() {
 	CGO_ENABLED=1 \
-	CGO_CFLAGS=${CGO_CFLAGS_FREEBSD} \
-	CGO_LDFLAGS=${CGO_LDFLAGS_FREEBSD} \
+	CGO_CFLAGS=${CGO_CFLAGS_OPENBSD} \
+	CGO_LDFLAGS=${CGO_LDFLAGS_OPENBSD} \
 	go build -o ${ibus_e_name} -ldflags "${LDFLAGS}" -mod=vendor
 }
 
