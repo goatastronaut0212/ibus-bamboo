@@ -116,14 +116,22 @@ void x11ClipboardReset() {
     if (text == NULL) {
         text = (char*)calloc(MAX_TEXT_LEN, sizeof(char));
     }
+    #ifdef __OpenBSD__
+    strlcpy(text, "", MAX_TEXT_LEN);
+    #else
     strcpy(text, "");
+    #endif
 }
 
 void x11Copy(char *str) {
     if (text == NULL) {
         text = (char*)calloc(MAX_TEXT_LEN, sizeof(char));
     }
+    #ifdef __OpenBSD__
+    strlcpy(text, str, MAX_TEXT_LEN);
+    #else
     strcpy(text, str);
+    #endif
     done = 0;
     fprintf(stderr, "...x11Clipboard text=%s, clipboard_running=%d\n", text, clipboard_running);
     if (clipboard_running == 0) {

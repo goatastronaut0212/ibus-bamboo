@@ -126,7 +126,11 @@ static void* thread_input_watching(void* data)
     text = (char*)calloc(MAX_TEXT_LEN, sizeof(char));
     char * cl = x11GetFocusWindowClassByDpy(dpy);
     if (cl != NULL) {
+      #ifdef __OpenBSD__
+      strlcpy(text, cl, MAX_TEXT_LEN);
+      #else
       strcpy(text, cl);
+      #endif
     }
     while (input_watching == 1) {
         XNextEvent(dpy, &event);
@@ -135,7 +139,11 @@ static void* thread_input_watching(void* data)
         if (event.type == FocusIn) {
             cl = x11GetFocusWindowClassByDpy(dpy);
             if (cl != NULL) {
+                #ifdef __OpenBSD__
+                strlcpy(text, cl, MAX_TEXT_LEN);
+                #else
                 strcpy(text, cl);
+                #endif
             }
         }
         XSync(dpy, 0);
