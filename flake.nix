@@ -29,12 +29,18 @@
 
             nativeBuildInputs = [
               pkgs.pkg-config
-              pkgs.wrapGAppsHook3
               pkgs.go
             ];
 
             buildInputs = [
-              pkgs.xorg.libXtst
+              pkgs.pkgconf
+              pkgs.xorg.libX11
+              pkgs.xorg.libXcursor
+              pkgs.xorg.libXrandr
+              pkgs.xorg.libXinerama
+              pkgs.xorg.libXi
+              pkgs.xorg.libXxf86vm
+              pkgs.libGL
             ];
 
             preConfigure = ''
@@ -61,8 +67,15 @@
           default = pkgs.mkShell {
             nativeBuildInputs = [
               pkgs.pkg-config
-              pkgs.wrapGAppsHook3
               pkgs.go
+              pkgs.pkgconf
+              pkgs.xorg.libX11
+              pkgs.xorg.libXcursor
+              pkgs.xorg.libXrandr
+              pkgs.xorg.libXinerama
+              pkgs.xorg.libXi
+              pkgs.xorg.libXxf86vm
+              pkgs.libGL
             ];
 
             buildInputs = [

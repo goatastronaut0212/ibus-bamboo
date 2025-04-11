@@ -27,6 +27,7 @@ import (
 	"strconv"
 	"sync"
 
+	"fyne.io/fyne/v2"
 	"github.com/BambooEngine/bamboo-core"
 	ibus "github.com/BambooEngine/goibus"
 	"github.com/godbus/dbus/v5"
@@ -62,14 +63,16 @@ type IBusBambooEngine struct {
 	shouldRestoreKeyStrokes bool
 	// enqueue key strokes to process later
 	shouldEnqueuKeyStrokes bool
+	uiAppShortcut          fyne.App
 }
 
-func NewIbusBambooEngine(name string, cfg *config.Config, base IEngine, preeditor bamboo.IEngine) *IBusBambooEngine {
+func NewIbusBambooEngine(name string, cfg *config.Config, base IEngine, preeditor bamboo.IEngine, uiApp fyne.App) *IBusBambooEngine {
 	return &IBusBambooEngine{
-		engineName: name,
-		IEngine:    base,
-		preeditor:  preeditor,
-		config:     cfg,
+		engineName:    name,
+		IEngine:       base,
+		preeditor:     preeditor,
+		config:        cfg,
+		uiAppShortcut: uiApp,
 	}
 }
 
@@ -267,17 +270,17 @@ func (e *IBusBambooEngine) PropertyActivate(propName string, propState uint32) *
 		return nil
 	}
 	if propName == PropKeyConfiguration {
-		ui.OpenGUI(e.engineName)
+		ui.OpenGUI(e.engineName, e.uiAppShortcut)
 		e.config = config.LoadConfig(e.engineName)
 		return nil
 	}
 	if propName == PropKeyInputModeLookupTableShortcut {
-		ui.OpenGUI(e.engineName)
+		ui.OpenGUI(e.engineName, e.uiAppShortcut)
 		e.config = config.LoadConfig(e.engineName)
 		return nil
 	}
 	if propName == PropKeyMacroTable {
-		ui.OpenGUI(e.engineName)
+		ui.OpenGUI(e.engineName, e.uiAppShortcut)
 		e.config = config.LoadConfig(e.engineName)
 		return nil
 	}

@@ -33,6 +33,7 @@ import (
 	"unicode"
 	"unicode/utf8"
 
+	"fyne.io/fyne/v2/app"
 	"github.com/BambooEngine/bamboo-core"
 	ibus "github.com/BambooEngine/goibus"
 	"github.com/godbus/dbus/v5"
@@ -52,12 +53,13 @@ func GetIBusEngineCreator() func(*dbus.Conn, string) dbus.ObjectPath {
 		var objectPath = dbus.ObjectPath(fmt.Sprintf("/org/freedesktop/IBus/Engine/%s/%d", engineName, time.Now().UnixNano()))
 		var inputMethod = bamboo.ParseInputMethod(cfg.InputMethodDefinitions, cfg.InputMethod)
 		baseEngine := ibus.BaseEngine(conn, objectPath)
-		var engine = NewIbusBambooEngine(engineName, config.LoadConfig(engineName), &baseEngine, bamboo.NewEngine(inputMethod, cfg.Flags))
+		uiApp := app.New()
+		var engine = NewIbusBambooEngine(engineName, config.LoadConfig(engineName), &baseEngine, bamboo.NewEngine(inputMethod, cfg.Flags), uiApp)
 		engine.propList = GetPropListByConfig(cfg)
 		engine.shouldEnqueuKeyStrokes = true
 		ibus.PublishEngine(conn, objectPath, engine)
 		if *gui {
-			ui.OpenGUI(engine.engineName)
+			ui.OpenGUI(engine.engineName, uiApp)
 			os.Exit(0)
 		}
 		go engine.init()
